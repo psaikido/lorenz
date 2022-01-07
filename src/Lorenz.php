@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
-namespace Enigma;
+namespace Lorenz;
 
 use \Exception;
 
-class Enigma
+class Lorenz
 {
     public $debug = false;
 
@@ -136,7 +136,7 @@ class Enigma
 }
 
 /*
-$thing = new Enigma;
+$thing = new Lorenz;
 //            SPIGWOMBLESPIGWOMBLESPIGWOMBLESPIGWOMBLE
 $magicKey = "SPIGWOMBLE";
 

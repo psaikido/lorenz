@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
-namespace EnigmaTest;
+namespace LorenzTest;
 
 use PHPUnit\Framework\TestCase;
-use Enigma\Enigma;
+use Lorenz\Lorenz;
 
-class Enigma_Test extends TestCase {
+class Lorenz_Test extends TestCase {
     private function revTest($actual, $expected) {
         $this->assertEquals($expected, $actual);
     }
 
     public function testBasics() {
-        $class = new Enigma;
+        $class = new Lorenz;
         $magicKey = "SPIGWOMBLE";
 
         $text0 = "ABC";
@@ -41,7 +41,7 @@ class Enigma_Test extends TestCase {
     }
 
     public function test_plainToBytes() {
-        $class = new Enigma;
+        $class = new Lorenz;
         $this->revTest($class->plainToBytes("E"), ["00001"]);
         $this->revTest($class->plainToBytes(" "), ["00100"]);
         $this->revTest($class->plainToBytes("."), ["00010"]);
@@ -52,7 +52,7 @@ class Enigma_Test extends TestCase {
     }
 
     public function test_bytesToPlain() {
-        $class = new Enigma;
+        $class = new Lorenz;
         $this->revTest($class->bytesToPlain(["00001"]), "E");
         $this->revTest($class->bytesToPlain(["00100"]), " ");
         $this->revTest($class->bytesToPlain(["00010"]), ".");
@@ -61,7 +61,7 @@ class Enigma_Test extends TestCase {
     }
 
     public function test_xorBits() {
-        $class = new Enigma;
+        $class = new Lorenz;
         
         $this->revTest($class->xorBits('0', '0'), '0');
         $this->revTest($class->xorBits('1', '1'), '0');
@@ -71,7 +71,7 @@ class Enigma_Test extends TestCase {
     }
 
     public function test_bitwiseEncode() {
-        $class = new Enigma;
+        $class = new Lorenz;
         
         $this->revTest($class->bitwiseEncode(["10000"],["10011"]), ["00011"]);
         $this->revTest($class->bitwiseEncode(["10100"],["10011"]), ["00111"]);
@@ -79,7 +79,7 @@ class Enigma_Test extends TestCase {
     }
 
     public function test_generatePlainKey() {
-        $class = new Enigma;
+        $class = new Lorenz;
         $magicKey = "MAGICKEY";
 
         $this->revTest($class->generatePlainKey($magicKey, "four"), "MAGI");
