@@ -136,23 +136,6 @@ class Lorenz
         return $retA;
     }
 
-    public function generatePlainKey($magicKey, $plainText) {
-        $retStr = '';
-        $y = 0;
-
-        $magicAr = str_split($magicKey);
-
-        for ($x = 0; $x < strlen($plainText); $x++) {
-            $retStr .= $magicAr[$y++];
-
-            if ($y >= sizeof($magicAr)) {
-                $y = 0;
-            }
-        }
-
-        return $retStr;
-    }
-
     public function makeKeyStream($settings, $keyLength) {
         $retStr = '';
         $y = $z = 0;
@@ -161,13 +144,15 @@ class Lorenz
         $chiTwoAr = $this->makeChiArray($this->chiTwo, $settings[1]);
 
         for ($x = 0; $x < $keyLength; $x++) {
-            $y = $y >= $this->chiOne - 1 ? $y = 0 : $y + 1;
-            $z = $z >= $this->chiTwo - 1? $z = 0 : $z + 1;
-            $chiOneByte = $chiOneAr[$y][1];
-            $chiTwoByte = $chiTwoAr[$z][1];
+            $y = $y >= $this->chiOne ? $y = 0 : $y;
+            $z = $z >= $this->chiTwo ? $z = 0 : $z;
+
+            $chiOneByte = $chiOneAr[$y++][1];
+            $chiTwoByte = $chiTwoAr[$z++][1];
             $xorProduct = $this->xorBytes(str_split($chiOneByte), str_split($chiTwoByte));
             $resultantLtr = array_search($xorProduct, $this->baudot);
             $retStr.= $resultantLtr;
+
         }
 
         return $retStr;
@@ -178,12 +163,12 @@ class Lorenz
         $y = $startingPos;
 
         for ($x = 0; $x < $upperLimit; $x++) {
-            $y = $y >= 25 ? $y = 0 : $y + 1;
-
             $chiAr[] = [
                 $this->alphabet[$y],
                 $this->baudot[$this->alphabet[$y]]
             ];
+
+            $y = $y >= 25 ? $y = 0 : $y + 1;
         }
 
         return $chiAr;

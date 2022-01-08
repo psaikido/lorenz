@@ -14,29 +14,29 @@ class Lorenz_Test extends TestCase {
         $magicKey = 'SPIGWOMBLE';
 
         $text0 = 'ABC';
-        $cipherText0 = ' HE';
+        $cipherText0 = '&JD';
 
         $text1 = 'abc';
-        $cipherText1 = 'ZHR';
+        $cipherText1 = 'HQM';
 
         $text2 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $cipherText2 = 'HVISPA-B.PE.-.BJO!LDRT&BUJ';
+        $cipherText2 = 'XDHYBIFJAFMAR?-RLXD&E&B.E.';
 
         $text3 = 'OM AH HUM BENZA GURU PEMA SIDDHI HUM';
-        $cipherText3 = 'NJUDV!IH&D..PGEGPO?!USHQL!ZZRAUO?C-?';
+        $cipherText3 = 'DUTHQCVMCQVNQLBKOBIOCC.KPKHXXVQ!QRAI';
 
         $text4 = 'THESE VIOLENT DELIGHTS HAVE VIOLENT ENDS AND IN THEIR TRIUMPH DIE LIKE FIRE AND POWDER WHICH AS THEY KISS CONSUME';
-        $cipherText4 = 'NENTFUL-UUAWYUK-COHJC.SAJ-XZWWQJ.-FBJB!!BFMXRUZJSAOJ NHOMT&VOTX&I.U?YIWDFNM.WO!D DL-OAZXTR!VAVZTNFNXIEBAXGW?HM&AD';
+        $cipherText4 = 'O.XTNZLSHMVBL&N.HKIRVGGW.DDL.WYDCYW?MZATLUZUHL.SF&HZWDV..YIEWNJLYBY?GUVRZCR.VRBT?Y!O?JXGE-ROYU.B ?XNDU JG.PIZX!SX';
 
         $this->revTest($class->code($text0, [9,22]), $cipherText0);
         $this->revTest($class->code($cipherText0, [9,22]), $text0);
-        $this->revTest($class->code($cipherText0, [8,22]), 'VQV');
-        $this->revTest($class->code($cipherText0, [9,23]), 'UJH');
+        $this->revTest($class->code($cipherText0, [8,22]), 'CXW');
+        $this->revTest($class->code($cipherText0, [9,23]), 'FZR');
         
         $this->revTest($class->code($text1, [5,6]), $cipherText1);
         $this->revTest($class->code($cipherText1, [5,6]), strtoupper($text1));
-        $this->revTest($class->code($text2, [30,0]), $cipherText2);
-        $this->revTest($class->code($cipherText2, [30,0]), $text2);
+        $this->revTest($class->code($text2, [20,1]), $cipherText2);
+        $this->revTest($class->code($cipherText2, [20,1]), $text2);
         $this->revTest($class->code($text3, [6,9]), $cipherText3);
         $this->revTest($class->code($cipherText3, [6,9]), $text3);
         $this->revTest($class->code($text4, [9,0]), $cipherText4);
@@ -89,25 +89,27 @@ class Lorenz_Test extends TestCase {
         $this->revTest($class->bitwiseEncode(['10111'],['10110']), ['00001']);
     }
 
-    public function test_generatePlainKey() {
-        $class = new Lorenz;
-        $magicKey = 'MAGICKEY';
-
-        $this->revTest($class->generatePlainKey($magicKey, 'four'), 'MAGI');
-        $this->revTest($class->generatePlainKey($magicKey, 'fourfourfour'), 'MAGICKEYMAGI');
-    }
-
     public function test_makeKeyStream() {
         $class = new Lorenz;
 
-        $key0 = 'TK &BM!DBW';
-        $key1 = 'TK &BM!DBWV GKMLG.CHAINP-FTK &Q!SIWZPNTME&XE..ZER.&LJJ.&IDDQ';
-        $key2 = 'TK &BM!DBWV GKMLG.CHAINP-FTK &Q!SIWZPNTME&XE..ZER.&LJJ.&IDDQLVN!ROAWYJZ&HQARR&LWUDQLTKSSLE&XKEOVJ-RWOOLUFKEOVJ-RWOOLUFKEOVKROAWYJZ&HQARR&LWUF&AGJ.VN!ROAWYSLE&XE..ZSIWZPNTMSQNJISR!HWVTGMP-FTK &BM!DBWV ';
-        $key3 = 'NZEEBDYC N';
+        $key0 = 'N!ROAWYJZ&';
+        $key1 = 'N!ROAWYJZ&HQARR&LWUF&AGJ.VN!ROAKSSLE&XE..!SIWZPNTMSQNJISR!HW';
+        $key2 = 'N!ROAWYJZ&HQARR&LWUF&AGJ.VN!ROAKSSLE&XE..!SIWZPNTMSQNJISR!HWVTINP-FTK &BM!DBWV GKMMVC!VUEQ-PMDX&KBA XXRYPGA!YP!PU! EYMKDX&KQ&O.HHXUIYIGUQ JIXITHPFLKT &O.HHEQ-PMYFYNF-.C!IOVXOOBM!- QTE UX- LGQU-NQCLF X';
+        $key3 = '! EYMKDX&K';
 
-        $this->revTest($class->makeKeyStream([1,25], strlen($key0)), $key0);
-        $this->revTest($class->makeKeyStream([1,25], strlen($key1)), $key1);
-        $this->revTest($class->makeKeyStream([1,25], strlen($key2)), $key2);
-        $this->revTest($class->makeKeyStream([18,7], strlen($key3)), $key3);
+        $this->revTest($class->makeKeyStream([1,24], strlen($key0)), $key0);
+        $this->revTest($class->makeKeyStream([1,24], strlen($key1)), $key1);
+        $this->revTest($class->makeKeyStream([1,24], strlen($key2)), $key2);
+        $this->revTest($class->makeKeyStream([18,6], strlen($key3)), $key3);
+    }
+
+    public function test_makeChiArray() {
+        $class = new Lorenz;
+
+        $this->revTest($class->makeChiArray(3,0), [
+            ['A', '00011'],
+            ['B', '11001'],
+            ['C', '01110'],
+        ]);
     }
 }
