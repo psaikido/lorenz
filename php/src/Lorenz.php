@@ -42,9 +42,20 @@ class Lorenz
         "Z" => "10001",
     ];
 
-    public function code($plainText, $magicKey) {
+    public $chiOne = 41;
+    public $chiTwo = 31;
+    public $alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+
+    // chi wheels
+    // 41, 31, 29, 26, and 23
+    // psi wheels
+    // 43, 47, 51, 53, and 59
+    // mu wheels
+    // 37 and 61
+
+    public function code($plainText, $settings) {
         $plainBytes = $this->plainToBytes($plainText);
-        $keyBytes = $this->plainToBytes($this->generatePlainKey($magicKey, $plainText));
+        $keyBytes = $this->plainToBytes($this->makeKeyStream($settings, strlen($plainText)));
         $cipherBytes = $this->bitwiseEncode($plainBytes, $keyBytes);
         $cipherText = $this->bytesToPlain($cipherBytes);
 
@@ -98,6 +109,16 @@ class Lorenz
         return $i === $j ? '0' : '1';
     }
 
+    public function xorBytes($a, $b) {
+        $tmpStr = '';
+
+        for ($x = 0; $x < sizeof($a); $x++) {
+            $tmpStr .= $this->xorBits($a[$x], $b[$x]);
+        }
+
+        return $tmpStr;
+    }
+
     public function bitwiseEncode($plainBytes, $keyBytes) {
         $retA = [];
         $tmpStr = '';
@@ -106,9 +127,7 @@ class Lorenz
             $plainFiveBitsAr = str_split($plainBytes[$x]);
             $keyFiveBitsAr = str_split($keyBytes[$x]);
 
-            for ($y = 0; $y < sizeof($plainFiveBitsAr); $y++) {
-                $tmpStr .= $this->xorBits($plainFiveBitsAr[$y], $keyFiveBitsAr[$y]);
-            }
+            $tmpStr = $this->xorBytes($plainFiveBitsAr, $keyFiveBitsAr);
 
             $retA[] = $tmpStr;
             $tmpStr = '';
@@ -133,16 +152,53 @@ class Lorenz
 
         return $retStr;
     }
+
+    public function makeKeyStream($settings, $keyLength) {
+        $retStr = '';
+        $y = $z = 0;
+
+        $chiOneAr = $this->makeChiArray($this->chiOne, $settings[0]);
+        $chiTwoAr = $this->makeChiArray($this->chiTwo, $settings[1]);
+
+        for ($x = 0; $x < $keyLength; $x++) {
+            $y = $y >= $this->chiOne - 1 ? $y = 0 : $y + 1;
+            $z = $z >= $this->chiTwo - 1? $z = 0 : $z + 1;
+            $chiOneByte = $chiOneAr[$y][1];
+            $chiTwoByte = $chiTwoAr[$z][1];
+            $xorProduct = $this->xorBytes(str_split($chiOneByte), str_split($chiTwoByte));
+            $resultantLtr = array_search($xorProduct, $this->baudot);
+            $retStr.= $resultantLtr;
+        }
+
+        return $retStr;
+    }
+
+    public function makeChiArray($upperLimit, $startingPos) {
+        $chiAr = [];
+        $y = $startingPos;
+
+        for ($x = 0; $x < $upperLimit; $x++) {
+            $y = $y >= 25 ? $y = 0 : $y + 1;
+
+            $chiAr[] = [
+                $this->alphabet[$y],
+                $this->baudot[$this->alphabet[$y]]
+            ];
+        }
+
+        return $chiAr;
+    }
 }
 
 /*
 $thing = new Lorenz;
 //            SPIGWOMBLESPIGWOMBLESPIGWOMBLESPIGWOMBLE
-$magicKey = "SPIGWOMBLE";
+//$magicKey = "SPIGWOMBLE";
 
 $plainText = "THESE VIOLENT DELIGHTS HAVE VIOLENT ENDS";
 $cipherText= "Y.U!LM.!RW GPVGBC!-YYW.CTIXXNUX UPAMXY& ";
 
-echo $thing->code($plainText, $magicKey);
+echo $thing->code($plainText, [3,19]);
+//echo $thing->makeKeyStream($plainText, [1,25]);
 echo "\n";
  */
