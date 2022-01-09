@@ -42,60 +42,38 @@ class Lorenz:
 
     alphabet = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z')
 
+    debug = False
+
     def __init__(self):
         pass
+
 
     def code(self, plainText, settings):
         for c in plainText.upper():
             if c not in self.baudot.keys():
                 return "Dissallowed character: " + c
 
+        if self.debug:
+            print(f"settings: {settings} :: msg: {plainText}")
+
         plainBytes = self.plainToBytes(plainText)
+        if self.debug:
+            print(f"plainBytes:  {plainBytes}")
+
         keyBytes = self.plainToBytes(self.makeKeyStream(settings, len(plainText)))
+        if self.debug:
+            print(f"keyBytes:    {keyBytes}")
+
         cipherBytes = self.bitwiseEncode(plainBytes, keyBytes)
+        if self.debug:
+            print(f"cipherBytes: {cipherBytes}")
+
         cipherText = self.bytesToPlain(cipherBytes)
+        if self.debug:
+            print(f"cipherText: {cipherText}")
 
         return cipherText
 
-
-    def xorBits(self, i, j):
-        if i == j:
-            return 0
-        else:
-            return 1
-
-    def xorBytes(self, a, b):
-        tmpStr = ''
-
-        for x in range(len(a)):
-            tmpStr += str(self.xorBits(a[x], b[x]))
-
-        return tmpStr
-
-    def bitwiseEncode(self, plainBytes, keyBytes):
-        retA = []
-
-        for x in range(len(plainBytes)):
-            retA.append(self.xorBytes(plainBytes[x], keyBytes[x]))
-            
-        return retA
-
-    def makeChiArray(self, upperLimit, startingPos):
-        chiAr = []
-        y = startingPos
-
-        for x in range(upperLimit):
-            chiAr.append([
-                self.alphabet[y],
-                self.baudot[self.alphabet[y]]
-                ])
-
-            if y >= 25:
-                y = 0
-            else:
-                y += 1
-
-        return chiAr
 
     def makeKeyStream(self, settings, keyLength):
         retStr = ""
@@ -120,6 +98,25 @@ class Lorenz:
 
         return retStr
 
+
+    def makeChiArray(self, upperLimit, startingPos):
+        chiAr = []
+        y = startingPos
+
+        for x in range(upperLimit):
+            chiAr.append([
+                self.alphabet[y],
+                self.baudot[self.alphabet[y]]
+                ])
+
+            if y >= 25:
+                y = 0
+            else:
+                y += 1
+
+        return chiAr
+
+
     def bytesToPlain(self, cipherBytes):
         retStr = ''
 
@@ -127,6 +124,7 @@ class Lorenz:
             retStr += list(self.baudot.keys())[list(self.baudot.values()).index(fiveb)]
 
         return retStr
+
 
     def plainToBytes(self, plain):
         bits = []
@@ -137,12 +135,40 @@ class Lorenz:
         return bits
 
 
+    def xorBits(self, i, j):
+        if i == j:
+            return 0
+        else:
+            return 1
+
+
+    def xorBytes(self, a, b):
+        tmpStr = ''
+
+        for x in range(len(a)):
+            tmpStr += str(self.xorBits(a[x], b[x]))
+
+        return tmpStr
+
+
+    def bitwiseEncode(self, plainBytes, keyBytes):
+        retA = []
+
+        for x in range(len(plainBytes)):
+            retA.append(self.xorBytes(plainBytes[x], keyBytes[x]))
+            
+        return retA
+
+
+
 # User input
 lorenz = Lorenz()
+"""
 inpNo1 = int(input("no1? "))
 inpNo2 = int(input("no2? "))
 print("Lorenz can handle a-zA-Z letters and these characters ,.?!'")
 msg = input("msg? ")
 res = lorenz.code(msg, [inpNo1, inpNo2])
-#res = lorenz.code("abc", [1, 1])
+"""
+res = lorenz.code("abc", [1, 1])
 print('Lorenz: ', res)
