@@ -3,9 +3,7 @@
 import re
 
 class Lorenz:
-    chiOne = 41
-    chiTwo = 31
-    chiThree = 29
+    chiWheels = [41, 31]
 
     baudot = {
         " " : "00100",
@@ -103,13 +101,13 @@ class Lorenz:
         retStr = ""
         y = z = 0
 
-        chiOneAr = self.makeChiArray(self.chiOne, settings[0])
-        chiTwoAr = self.makeChiArray(self.chiTwo, settings[1])
+        chiOneAr = self.makeChiArray(self.chiWheels[0], settings[0])
+        chiTwoAr = self.makeChiArray(self.chiWheels[1], settings[1])
 
         for x in range(keyLength):
-            if y >= self.chiOne:
+            if y >= self.chiWheels[0]:
                 y = 0
-            if z >= self.chiTwo:
+            if z >= self.chiWheels[1]:
                 z = 0
             chiOneByte = chiOneAr[y][1]
             chiTwoByte = chiTwoAr[z][1]
@@ -146,4 +144,5 @@ inpNo2 = int(input("no2? "))
 print("Lorenz can handle a-zA-Z letters and these characters ,.?!'")
 msg = input("msg? ")
 res = lorenz.code(msg, [inpNo1, inpNo2])
+#res = lorenz.code("abc", [1, 1])
 print('Lorenz: ', res)
