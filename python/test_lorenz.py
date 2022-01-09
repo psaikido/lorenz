@@ -81,12 +81,14 @@ def test_code():
     text4 = "THESE VIOLENT DELIGHTS HAVE VIOLENT ENDS AND IN THEIR TRIUMPH DIE LIKE FIRE AND POWDER WHICH AS THEY KISS CONSUME"
     cipherText4 = "O.XTNZLSHMVBL'N.HKIRVGGW.DDL.WYDCYW?MZATLUZUHL.SF'HZWDV..YIEWNJLYBY?GUVRZCR.VRBT?Y!O?JXGE,ROYU.B ?XNDU JG.PIZX!SX"
 
+    text5 = "plain*text"
+    text6 = "plain[text"
+
     assert lorenz.code(text0, [9,22]) == cipherText0
     assert lorenz.code(text0, [9,22]) == cipherText0
     assert lorenz.code(cipherText0, [9,22]) == text0
     assert lorenz.code(cipherText0, [8,22]) == "CXW"
     assert lorenz.code(cipherText0, [9,23]) == "FZR"
-
     assert lorenz.code(text1, [5,6]) == cipherText1
     assert lorenz.code(cipherText1, [5,6]) == text1.upper()
     assert lorenz.code(text2, [20,1]) == cipherText2
@@ -95,3 +97,5 @@ def test_code():
     assert lorenz.code(cipherText3, [6,9]) == text3
     assert lorenz.code(text4, [9,0]) == cipherText4
     assert lorenz.code(cipherText4, [9,0]) == text4
+    assert lorenz.code(text5, [9,10]) == "Dissallowed character: *" 
+    assert lorenz.code(text6, [9,10]) == "Dissallowed character: [" 

@@ -2,8 +2,18 @@
 
 import re
 
+"""
+chi wheels
+41, 31, 29, 26, and 23
+psi wheels
+43, 47, 51, 53, and 59
+mu wheels
+37 and 61
+"""
+
 chiOne = 41
 chiTwo = 31
+chiThree = 29
 
 baudot = {
     " " : "00100",
@@ -43,6 +53,10 @@ baudot = {
 alphabet = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z')
 
 def code(plainText, settings):
+    for c in plainText.upper():
+        if c not in baudot.keys():
+            return "Dissallowed character: " + c
+
     plainBytes = plainToBytes(plainText)
     keyBytes = plainToBytes(makeKeyStream(settings, len(plainText)))
     cipherBytes = bitwiseEncode(plainBytes, keyBytes)
@@ -129,11 +143,9 @@ def plainToBytes(plain):
 
     return bits
 
-"""
 inpNo1 = int(input("no1? "))
 inpNo2 = int(input("no2? "))
 print("Lorenz can handle a-zA-Z letters and these characters ,.?!'")
 msg = input("msg? ")
 res = code(msg, [inpNo1, inpNo2])
 print('Lorenz: ', res)
-"""
