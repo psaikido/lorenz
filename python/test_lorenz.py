@@ -1,7 +1,9 @@
 #! /usr/bin/python
 
+from lorenz import Lorenz
+
 def test_xorBits():
-    import lorenz
+    lorenz = Lorenz()
 
     assert lorenz.xorBits('0', '0') == 0
     assert lorenz.xorBits('0', '1') == 1
@@ -9,29 +11,32 @@ def test_xorBits():
     assert lorenz.xorBits('', '0') == 1
 
 def test_xorBytes():
-    import lorenz
+    lorenz = Lorenz()
 
     assert lorenz.xorBytes([1,0,0,0,0], [0,0,0,0,1]) == '10001'
     assert lorenz.xorBytes([0,1,0,1,0], [1,0,1,0,1]) == '11111'
     assert lorenz.xorBytes([1,1,1,1,1], [1,0,1,0,1]) == '01010'
 
 def test_bitwiseEncode():
-    import lorenz
+    lorenz = Lorenz()
 
     assert lorenz.bitwiseEncode(['10000'],['10011']) == ['00011']
     assert lorenz.bitwiseEncode(['10100'],['10011']) == ['00111']
     assert lorenz.bitwiseEncode(['10111'],['10110']) == ['00001']
 
 def test_makeChiArray():
-    import lorenz
+    lorenz = Lorenz()
 
-    assert lorenz.makeChiArray(3,0) == [
+    assert lorenz.makeChiArray(5,0) == [
             ['A', '00011'],
             ['B', '11001'],
-            ['C', '01110']
+            ['C', '01110'],
+            ['D', '01001'],
+            ['E', '00001']
         ]
+
 def test_makeKeyStream():
-    import lorenz
+    lorenz = Lorenz()
 
     key0 = "N!ROAWYJZ'"
     key1 = "N!ROAWYJZ'HQARR'LWUF'AGJ.VN!ROAKSSLE'XE..!SIWZPNTMSQNJISR!HW"
@@ -44,7 +49,7 @@ def test_makeKeyStream():
     assert lorenz.makeKeyStream([18,6], len(key3)) == key3
 
 def test_bytesToPlain():
-    import lorenz
+    lorenz = Lorenz()
 
     assert lorenz.bytesToPlain(['00001']) == "E"
     assert lorenz.bytesToPlain(['00100']) == " "
@@ -53,7 +58,7 @@ def test_bytesToPlain():
     #assert lorenz.bytesToPlain(['elf']) == ""
 
 def test_plainToBytes():
-    import lorenz
+    lorenz = Lorenz()
 
     assert lorenz.plainToBytes('E') == ['00001']
     assert lorenz.plainToBytes(' ') == ['00100']
@@ -64,7 +69,7 @@ def test_plainToBytes():
     #assert lorenz.plainToBytes('3') == 'Undefined offset: 3'
 
 def test_code():
-    import lorenz
+    lorenz = Lorenz()
 
     text0 = "ABC"
     cipherText0 = "'JD"
@@ -84,6 +89,9 @@ def test_code():
     text5 = "plain*text"
     text6 = "plain[text"
 
+    text7 = "ABCDE"
+    cipherText7 = "CN.RF"
+
     assert lorenz.code(text0, [9,22]) == cipherText0
     assert lorenz.code(text0, [9,22]) == cipherText0
     assert lorenz.code(cipherText0, [9,22]) == text0
@@ -99,3 +107,5 @@ def test_code():
     assert lorenz.code(cipherText4, [9,0]) == text4
     assert lorenz.code(text5, [9,10]) == "Dissallowed character: *" 
     assert lorenz.code(text6, [9,10]) == "Dissallowed character: [" 
+    #assert lorenz.code(text7, [1,1]) == cipherText7
+    #assert lorenz.code(cipherText7, [13,4]) == text7
