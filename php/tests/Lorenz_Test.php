@@ -11,22 +11,21 @@ class Lorenz_Test extends TestCase {
 
     public function testBasics() {
         $class = new Lorenz;
-        $magicKey = 'SPIGWOMBLE';
 
-        $text0 = 'ABC';
-        $cipherText0 = '&JD';
+        $text0 = "ABC";
+        $cipherText0 = "'JD";
 
-        $text1 = 'abc';
-        $cipherText1 = 'HQM';
+        $text1 = "abc";
+        $cipherText1 = "HQM";
 
-        $text2 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $cipherText2 = 'XDHYBIFJAFMAR?-RLXD&E&B.E.';
+        $text2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $cipherText2 = "XDHYBIFJAFMAR?,RLXD'E'B.E.";
 
-        $text3 = 'OM AH HUM BENZA GURU PEMA SIDDHI HUM';
-        $cipherText3 = 'DUTHQCVMCQVNQLBKOBIOCC.KPKHXXVQ!QRAI';
+        $text3 = "OM AH HUM BENZA GURU PEMA SIDDHI HUM";
+        $cipherText3 = "DUTHQCVMCQVNQLBKOBIOCC.KPKHXXVQ!QRAI";
 
-        $text4 = 'THESE VIOLENT DELIGHTS HAVE VIOLENT ENDS AND IN THEIR TRIUMPH DIE LIKE FIRE AND POWDER WHICH AS THEY KISS CONSUME';
-        $cipherText4 = 'O.XTNZLSHMVBL&N.HKIRVGGW.DDL.WYDCYW?MZATLUZUHL.SF&HZWDV..YIEWNJLYBY?GUVRZCR.VRBT?Y!O?JXGE-ROYU.B ?XNDU JG.PIZX!SX';
+        $text4 = "THESE VIOLENT DELIGHTS HAVE VIOLENT ENDS AND IN THEIR TRIUMPH DIE LIKE FIRE AND POWDER WHICH AS THEY KISS CONSUME";
+        $cipherText4 = "O.XTNZLSHMVBL'N.HKIRVGGW.DDL.WYDCYW?MZATLUZUHL.SF'HZWDV..YIEWNJLYBY?GUVRZCR.VRBT?Y!O?JXGE,ROYU.B ?XNDU JG.PIZX!SX";
 
         $this->revTest($class->code($text0, [9,22]), $cipherText0);
         $this->revTest($class->code($cipherText0, [9,22]), $text0);
@@ -92,10 +91,10 @@ class Lorenz_Test extends TestCase {
     public function test_makeKeyStream() {
         $class = new Lorenz;
 
-        $key0 = 'N!ROAWYJZ&';
-        $key1 = 'N!ROAWYJZ&HQARR&LWUF&AGJ.VN!ROAKSSLE&XE..!SIWZPNTMSQNJISR!HW';
-        $key2 = 'N!ROAWYJZ&HQARR&LWUF&AGJ.VN!ROAKSSLE&XE..!SIWZPNTMSQNJISR!HWVTINP-FTK &BM!DBWV GKMMVC!VUEQ-PMDX&KBA XXRYPGA!YP!PU! EYMKDX&KQ&O.HHXUIYIGUQ JIXITHPFLKT &O.HHEQ-PMYFYNF-.C!IOVXOOBM!- QTE UX- LGQU-NQCLF X';
-        $key3 = '! EYMKDX&K';
+        $key0 = "N!ROAWYJZ'";
+        $key1 = "N!ROAWYJZ'HQARR'LWUF'AGJ.VN!ROAKSSLE'XE..!SIWZPNTMSQNJISR!HW";
+        $key2 = "N!ROAWYJZ'HQARR'LWUF'AGJ.VN!ROAKSSLE'XE..!SIWZPNTMSQNJISR!HWVTINP,FTK 'BM!DBWV GKMMVC!VUEQ,PMDX'KBA XXRYPGA!YP!PU! EYMKDX'KQ'O.HHXUIYIGUQ JIXITHPFLKT 'O.HHEQ,PMYFYNF,.C!IOVXOOBM!, QTE UX, LGQU,NQCLF X";
+        $key3 = "! EYMKDX'K";
 
         $this->revTest($class->makeKeyStream([1,24], strlen($key0)), $key0);
         $this->revTest($class->makeKeyStream([1,24], strlen($key1)), $key1);

@@ -9,11 +9,11 @@ class Lorenz
 
     public $baudot = [
         " " => "00100",
+        "," => "01000",
         "." => "00010",
-        "!" => "11111",
         "?" => "00000",
-        "-" => "01000",
-        "&" => "11011",
+        "!" => "11111",
+        "'" => "11011",
         "A" => "00011",
         "B" => "11001",
         "C" => "01110",
@@ -177,13 +177,16 @@ class Lorenz
 
 /*
 $thing = new Lorenz;
-//            SPIGWOMBLESPIGWOMBLESPIGWOMBLESPIGWOMBLE
-//$magicKey = "SPIGWOMBLE";
 
-$plainText = "THESE VIOLENT DELIGHTS HAVE VIOLENT ENDS";
-$cipherText= "Y.U!LM.!RW GPVGBC!-YYW.CTIXXNUX UPAMXY& ";
+//$plainText = "THESE VIOLENT DELIGHTS HAVE VIOLENT ENDS";
+//$cipherText= "Y.U!LM.!RW GPVGBC!-YYW.CTIXXNUX UPAMXY& ";
+//echo $thing->code($plainText, [3,19]);
 
-echo $thing->code($plainText, [3,19]);
-//echo $thing->makeKeyStream($plainText, [1,25]);
+$inp1 = readline('no1? ');
+$inp2 = readline('no2? ');
+print("Lorenz can handle a-z, (case insensitive) and spaces, ',', '.', '?', '!' and literal '.") . PHP_EOL;
+$msg = readline('msg? ');
+
+echo "Lorenz: " . $thing->code($msg, [(int)$inp1,(int)$inp2]) . PHP_EOL;
 echo "\n";
  */

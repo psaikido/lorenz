@@ -1,12 +1,17 @@
 #! /usr/bin/python
 
+import re
+
+chiOne = 41
+chiTwo = 31
+
 baudot = {
     " " : "00100",
+    "," : "01000",
     "." : "00010",
-    "!" : "11111",
     "?" : "00000",
-    "-" : "01000",
-    "&" : "11011",
+    "!" : "11111",
+    "'" : "11011",
     "A" : "00011",
     "B" : "11001",
     "C" : "01110",
@@ -36,9 +41,6 @@ baudot = {
 }
 
 alphabet = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z')
-
-chiOne = 41
-chiTwo = 31
 
 def code(plainText, settings):
     plainBytes = plainToBytes(plainText)
@@ -127,3 +129,11 @@ def plainToBytes(plain):
 
     return bits
 
+"""
+inpNo1 = int(input("no1? "))
+inpNo2 = int(input("no2? "))
+print("Lorenz can handle a-zA-Z letters and these characters ,.?!'")
+msg = input("msg? ")
+res = code(msg, [inpNo1, inpNo2])
+print('Lorenz: ', res)
+"""
