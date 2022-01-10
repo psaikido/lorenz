@@ -3,8 +3,7 @@
 import re
 
 class Lorenz:
-    #chiWheelLengths = [41, 31]
-    chiWheelLengths = [3, 4, 5]
+    chiWheelLengths = [41, 31, 29]
 
     baudot = {
         " " : "00100",

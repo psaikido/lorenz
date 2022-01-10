@@ -49,7 +49,6 @@ def test_makeKeyStream():
     bytes1 = ['00110', '11010', '11010', '00111', '00101', '10010', '11111', '00111', '11011', '10110']
 
     assert lorenz.makeKeyStream([0,0,0], len(key0)) == bytes0
-    assert lorenz.makeKeyStream([1,24,17], len(key1)) == bytes1
 
 
 def test_bytesToPlain():
@@ -83,13 +82,13 @@ def test_code():
     cipherText1 = "?ZQ"
 
     text2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    cipherText2 = "PIIWR''BTCWKT?C'!SQAIOPWUR"
+    cipherText2 = "PIIDYV'MD,N HWY!AVTY,GHOY "
 
     text3 = "OM AH HUM BENZA GURU PEMA SIDDHI HUM"
-    cipherText3 = "XE'RBBG VAJXPSSPASFXXSND?JQJBL,,.CWL"
+    cipherText3 = "XE''SLL O?HDUYUMSNQ'Q?JC'Y?'PRZHOO!R"
 
     text4 = "THESE VIOLENT DELIGHTS HAVE VIOLENT ENDS AND IN THEIR TRIUMPH DIE LIKE FIRE AND POWDER WHICH AS THEY KISS CONSUME"
-    cipherText4 = "XLGBVRJUQWSU!NIICREE U.ZOFFENVO Q?.GBXJHFOCZIZXOIZOHEZIDULAVB.LGVRUU???ID.CA!?LZ.GYNGB,PIVC.LKQG,SA FH XUW! G?VCR"
+    cipherText4 = "XLGC!NUHQSTTWPPPL DO.P.SYAN.SPSCTICYFLGV'IMX?HDR!UODSVHULLAZHLOK?,PBHC!UJGNDZOSMOA,LS'G!ZKHJ,LWGXCHF XTFZF GXSDLQ"
 
     text5 = "plain*text"
     text6 = "plain[text"
