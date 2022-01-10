@@ -3,7 +3,8 @@
 import re
 
 class Lorenz:
-    chiWheels = [41, 31]
+    #chiWheelLengths = [41, 31]
+    chiWheelLengths = [3, 4, 5]
 
     baudot = {
         " " : "00100",
@@ -42,6 +43,7 @@ class Lorenz:
 
     alphabet = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z')
 
+    #debug = True
     debug = False
 
     def __init__(self):
@@ -49,24 +51,24 @@ class Lorenz:
 
 
     def code(self, plainText, settings):
+        if self.debug:
+            print(f"settings: {settings} :: msg: {plainText}")
+
         for c in plainText.upper():
             if c not in self.baudot.keys():
                 return "Dissallowed character: " + c
 
-        if self.debug:
-            print(f"settings: {settings} :: msg: {plainText}")
-
         plainBytes = self.plainToBytes(plainText)
         if self.debug:
-            print(f"plainBytes:  {plainBytes}")
+            print(f"plainBytes: {plainBytes}")
 
-        keyBytes = self.plainToBytes(self.makeKeyStream(settings, len(plainText)))
+        keyBytes = self.makeKeyStream(settings, len(plainText))
         if self.debug:
-            print(f"keyBytes:    {keyBytes}")
+            print(f"keyBytes:   {keyBytes}")
 
         cipherBytes = self.bitwiseEncode(plainBytes, keyBytes)
         if self.debug:
-            print(f"cipherBytes: {cipherBytes}")
+            print(f"cipherByts: {cipherBytes}")
 
         cipherText = self.bytesToPlain(cipherBytes)
         if self.debug:
@@ -77,26 +79,47 @@ class Lorenz:
 
     def makeKeyStream(self, settings, keyLength):
         retStr = ""
+        chiWheels = []
+        firstTransform = []
+
+        for x in range(len(self.chiWheelLengths)):
+            wh = self.makeChiArray(self.chiWheelLengths[x], settings[x])
+            chiWheels.append(wh)
+
+        firstTransform = self.xorWheelPair(keyLength, chiWheels[0], chiWheels[1])
+        if self.debug:
+            print(f"firstTranm: {firstTransform}")
+
+        secondTransform = self.xorWheelPair(keyLength, firstTransform, chiWheels[2])
+        if self.debug:
+            print(f"secondTrnm: {secondTransform}")
+        
+        return secondTransform
+
+
+    def xorWheelPair(self, keyLength, wheelOne, wheelTwo):
+        if self.debug:
+            print(f"wheelOne:   {wheelOne}")
+            print(f"wheelTwo:   {wheelTwo}")
+
+        bytes = []
         y = z = 0
 
-        chiOneAr = self.makeChiArray(self.chiWheels[0], settings[0])
-        chiTwoAr = self.makeChiArray(self.chiWheels[1], settings[1])
-
         for x in range(keyLength):
-            if y >= self.chiWheels[0]:
+            if y >= len(wheelOne):
                 y = 0
-            if z >= self.chiWheels[1]:
+            if z >= len(wheelTwo):
                 z = 0
-            chiOneByte = chiOneAr[y][1]
-            chiTwoByte = chiTwoAr[z][1]
-            xorProduct = self.xorBytes(list(chiOneByte), list(chiTwoByte))
-            resultantLtr = list(self.baudot.keys())[list(self.baudot.values()).index(xorProduct)]
-            retStr += resultantLtr
-            
+
+            chiOneByte = wheelOne[y]
+            chiTwoByte = wheelTwo[z]
+            bytes.append(self.xorBytes(list(chiOneByte), list(chiTwoByte)))
+
             y += 1
             z += 1
+        
+        return bytes 
 
-        return retStr
 
 
     def makeChiArray(self, upperLimit, startingPos):
@@ -104,10 +127,7 @@ class Lorenz:
         y = startingPos
 
         for x in range(upperLimit):
-            chiAr.append([
-                self.alphabet[y],
-                self.baudot[self.alphabet[y]]
-                ])
+            chiAr.append(self.baudot[self.alphabet[y]])
 
             if y >= 25:
                 y = 0
@@ -163,12 +183,11 @@ class Lorenz:
 
 # User input
 lorenz = Lorenz()
-"""
 inpNo1 = int(input("no1? "))
 inpNo2 = int(input("no2? "))
+inpNo3 = int(input("no3? "))
 print("Lorenz can handle a-zA-Z letters and these characters ,.?!'")
 msg = input("msg? ")
-res = lorenz.code(msg, [inpNo1, inpNo2])
-"""
-res = lorenz.code("abc", [1, 1])
+res = lorenz.code(msg, [inpNo1, inpNo2, inpNo3])
+#res = lorenz.code("abc", [0, 0, 0])
 print('Lorenz: ', res)
