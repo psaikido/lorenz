@@ -41,33 +41,46 @@ class Lorenz:
         {"char" : "'", "code" : "11011"}
     )
 
-    #debug = True
-    debug = False
-
     def __init__(self):
         pass
 
 
     def run(self):
         while True:
-            print("Lorenz wheel settings as 3, comma separated numbers: ")
+            print("Enter Lorenz wheel settings as 3, comma separated numbers: ")
+
             settingsInput = input("settings: ").split(',')
-            self.getMsg(settingsInput)
+
+            if len(settingsInput) != len(self.chiWheelLengths):
+                print("3 inputs are needed")
+                return
+
+            #settings = [int(x) for x in settingsInput]
+            settings = []
+            for x in range(3):
+                try:
+                    cog = int(settingsInput[x])
+
+                    if cog > self.chiWheelLengths[x]:
+                        print(f"{cog} is too big")
+                        return
+
+                    settings.append(cog)
+                except ValueError:
+                    print("Integers only")
+                    return
+
+            self.getMsg(settings)
             
 
-    def getMsg(self, settingsInput):
-        print("Lorenz can handle a-zA-Z letters and these characters ,.?!'")
-        settings = [int(x) for x in settingsInput]
-        msg = input("msg? ")
-        res = self.code(msg, settings)
-        print(res)
+    def getMsg(self, settings):
+        print("Enter ordinary letters, spaces and \",.?!'\"")
+        res = self.code(input("msg? "), settings)
+        print(f"Lorenz algo->\"{res}\"")
         sys.exit(0)
 
 
     def code(self, plainText, settings):
-        if self.debug:
-            print(f"settings: {settings} :: msg: {plainText}")
-
         for c in plainText.upper():
             found = False
 
@@ -80,20 +93,9 @@ class Lorenz:
                 return "Dissallowed character: " + c
 
         plainBytes = self.plainToBytes(plainText)
-        if self.debug:
-            print(f"plainBytes: {plainBytes}")
-
         keyBytes = self.makeKeyStream(settings, len(plainText))
-        if self.debug:
-            print(f"keyBytes:   {keyBytes}")
-
         cipherBytes = self.bitwiseEncode(plainBytes, keyBytes)
-        if self.debug:
-            print(f"cipherByts: {cipherBytes}")
-
         cipherText = self.bytesToPlain(cipherBytes)
-        if self.debug:
-            print(f"cipherText: {cipherText}")
 
         return cipherText
 
@@ -108,21 +110,12 @@ class Lorenz:
             chiWheels.append(wh)
 
         firstTransform = self.xorWheelPair(keyLength, chiWheels[0], chiWheels[1])
-        if self.debug:
-            print(f"firstTranm: {firstTransform}")
-
         secondTransform = self.xorWheelPair(keyLength, firstTransform, chiWheels[2])
-        if self.debug:
-            print(f"secondTrnm: {secondTransform}")
         
         return secondTransform
 
 
     def xorWheelPair(self, keyLength, wheelOne, wheelTwo):
-        if self.debug:
-            print(f"wheelOne:   {wheelOne}")
-            print(f"wheelTwo:   {wheelTwo}")
-
         bytes = []
         y = z = 0
 
@@ -144,7 +137,7 @@ class Lorenz:
 
     def makeChiArray(self, upperLimit, startingPos):
         chiAr = []
-        y = startingPos
+        y = startingPos % 26
 
         for x in range(upperLimit):
             chiAr.append(self.baudot[y]["code"])
