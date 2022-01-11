@@ -1,0 +1,3 @@
+The Enigma machine was improved on to make the [Lorenz](https://en.wikipedia.org/wiki/Lorenz_cipher).  
+
+The Baudot-Murray code is used to bitwise xor with a key. This program uses just three 'chi wheels'. The real thing had way more possible permutations. This here is just to demonstrate the principle.
