@@ -93,9 +93,6 @@ def test_code():
     text5 = "plain*text"
     text6 = "plain[text"
 
-    text7 = "ABCDE"
-    cipherText7 = "CN.RF"
-
     assert lorenz.code(text0, [9,22,13]) == cipherText0
     assert lorenz.code(cipherText0, [9,22,13]) == text0
     assert lorenz.code(cipherText0, [8,22,3]) == "J ,"
@@ -110,5 +107,3 @@ def test_code():
     assert lorenz.code(cipherText4, [9,0,18]) == text4
     assert lorenz.code(text5, [9,10,11]) == "Dissallowed character: *" 
     assert lorenz.code(text6, [9,10,11]) == "Dissallowed character: [" 
-    #assert lorenz.code(text7, [1,1]) == cipherText7
-    #assert lorenz.code(cipherText7, [13,4]) == text7
