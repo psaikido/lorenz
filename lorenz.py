@@ -55,7 +55,6 @@ class Lorenz:
                 print("3 inputs are needed")
                 return
 
-            #settings = [int(x) for x in settingsInput]
             settings = []
             for x in range(3):
                 try:
@@ -197,6 +196,7 @@ class Lorenz:
             retA.append(self.xorBytes(plainBytes[x], keyBytes[x]))
             
         return retA
+
 
 if __name__ == "__main__":
     Lorenz().run()
