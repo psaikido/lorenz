@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-from lorenz_cls import Lorenz
+from lorenz import Lorenz
 
 def test_xorBits():
     lorenz = Lorenz()
