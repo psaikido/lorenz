@@ -5,42 +5,40 @@ import re
 class Lorenz:
     chiWheelLengths = [41, 31, 29]
 
-    baudot = {
-        " " : "00100",
-        "," : "01000",
-        "." : "00010",
-        "?" : "00000",
-        "!" : "11111",
-        "'" : "11011",
-        "A" : "00011",
-        "B" : "11001",
-        "C" : "01110",
-        "D" : "01001",
-        "E" : "00001",
-        "F" : "01101",
-        "G" : "11010",
-        "H" : "10100",
-        "I" : "00110",
-        "J" : "01011",
-        "K" : "01111",
-        "L" : "10010",
-        "M" : "11100",
-        "N" : "01100",
-        "O" : "11000",
-        "P" : "10110",
-        "Q" : "10111",
-        "R" : "01010",
-        "S" : "00101",
-        "T" : "10000",
-        "U" : "00111",
-        "V" : "11110",
-        "W" : "10011",
-        "X" : "11101",
-        "Y" : "10101",
-        "Z" : "10001",
-    }
-
-    alphabet = ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z')
+    baudot = (
+        {"char" : "A", "code" : "00011"},
+        {"char" : "B", "code" : "11001"},
+        {"char" : "C", "code" : "01110"},
+        {"char" : "D", "code" : "01001"},
+        {"char" : "E", "code" : "00001"},
+        {"char" : "F", "code" : "01101"},
+        {"char" : "G", "code" : "11010"},
+        {"char" : "H", "code" : "10100"},
+        {"char" : "I", "code" : "00110"},
+        {"char" : "J", "code" : "01011"},
+        {"char" : "K", "code" : "01111"},
+        {"char" : "L", "code" : "10010"},
+        {"char" : "M", "code" : "11100"},
+        {"char" : "N", "code" : "01100"},
+        {"char" : "O", "code" : "11000"},
+        {"char" : "P", "code" : "10110"},
+        {"char" : "Q", "code" : "10111"},
+        {"char" : "R", "code" : "01010"},
+        {"char" : "S", "code" : "00101"},
+        {"char" : "T", "code" : "10000"},
+        {"char" : "U", "code" : "00111"},
+        {"char" : "V", "code" : "11110"},
+        {"char" : "W", "code" : "10011"},
+        {"char" : "X", "code" : "11101"},
+        {"char" : "Y", "code" : "10101"},
+        {"char" : "Z", "code" : "10001"},
+        {"char" : " ", "code" : "00100"},
+        {"char" : ",", "code" : "01000"},
+        {"char" : ".", "code" : "00010"},
+        {"char" : "?", "code" : "00000"},
+        {"char" : "!", "code" : "11111"},
+        {"char" : "'", "code" : "11011"}
+    )
 
     #debug = True
     debug = False
@@ -54,7 +52,14 @@ class Lorenz:
             print(f"settings: {settings} :: msg: {plainText}")
 
         for c in plainText.upper():
-            if c not in self.baudot.keys():
+            found = False
+
+            for i in range(len(self.baudot)):
+                if self.baudot[i]["char"] == c:
+                    found = True
+                    break
+
+            if found != True:
                 return "Dissallowed character: " + c
 
         plainBytes = self.plainToBytes(plainText)
@@ -126,7 +131,7 @@ class Lorenz:
         y = startingPos
 
         for x in range(upperLimit):
-            chiAr.append(self.baudot[self.alphabet[y]])
+            chiAr.append(self.baudot[y]["code"])
 
             if y >= 25:
                 y = 0
@@ -136,11 +141,14 @@ class Lorenz:
         return chiAr
 
 
-    def bytesToPlain(self, cipherBytes):
+    def bytesToPlain(self, bytes):
         retStr = ''
 
-        for fiveb in cipherBytes:
-            retStr += list(self.baudot.keys())[list(self.baudot.values()).index(fiveb)]
+        for byte in bytes:
+            for i in range(len(self.baudot)):
+                if self.baudot[i]["code"] == byte:
+                    retStr += self.baudot[i]["char"]
+                    break
 
         return retStr
 
@@ -149,7 +157,10 @@ class Lorenz:
         bits = []
 
         for c in list(plain):
-            bits.append(self.baudot[c.upper()])
+            for i in range(len(self.baudot)):
+                if self.baudot[i]["char"] == c.upper():
+                    bits.append(self.baudot[i]["code"])
+                    break
 
         return bits
 
@@ -178,16 +189,3 @@ class Lorenz:
             
         return retA
 
-
-"""
-# User input
-lorenz = Lorenz()
-inpNo1 = int(input("no1? "))
-inpNo2 = int(input("no2? "))
-inpNo3 = int(input("no3? "))
-print("Lorenz can handle a-zA-Z letters and these characters ,.?!'")
-msg = input("msg? ")
-res = lorenz.code(msg, [inpNo1, inpNo2, inpNo3])
-#res = lorenz.code("abc", [0, 0, 0])
-print('Lorenz: ', res)
-"""
